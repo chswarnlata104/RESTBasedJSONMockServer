@@ -1,0 +1,21 @@
+{
+  "posts": [{
+    "id": 0,
+    "title": "title1",
+    "author": "CIQ",
+    "views": 100,
+    "reviews": 31
+  }, {
+    "id": 1,
+    "title": "title2",
+    "author": "CommerceIQ",
+    "views": 200,
+    "reviews": 52
+  }],
+  "authors": [{
+    "id": 0,
+    "firstName": "Commerce",
+    "lastName": "IQ",
+    "posts": 45
+  }]
+}

@@ -56,11 +56,28 @@ exports.getStore = async (req, res) => {
 
 exports.deleteStore = async (req, res) => {
   try {
+    const entity = req.params.store;
+    let result = [];
+    Object.keys(store).forEach(key => {
+      if(key === req.params.store) {
+        result = store[key];
+      }
+    });
+    const id = req.params.id;
+    let updatedStore = result.filter(res => res.id != id);
+    store[entity] = updatedStore;
 
-    res.status(204).json({
+    fs.writeFile(
+    `${__dirname}/../data/store.json`,
+    JSON.stringify(store),
+    err => {
+      res.status(204).json({
       status: 'success',
       data: null
     });
+    }
+  );
+
   } catch (err) {
     res.status(404).json({
       status: 'fail',
@@ -72,12 +89,32 @@ exports.deleteStore = async (req, res) => {
 
 exports.createStore = async (req, res) => {
   try {
-
-    res.status(201).json({
-      status: 'success',
-      data: {
+  const entity = req.params.store;
+  let result = [];
+   const id = req.params.id;
+    Object.keys(store).forEach(key => {
+      if(key === req.params.store) {
+        result = store[key];
       }
     });
+    const newId = result.length === 0 ? 0 : result[result.length - 1].id + 1;
+    const newStore = Object.assign({ id: newId }, req.body);
+    result.push(newStore);
+    store[entity] = result;
+  
+    fs.writeFile(
+      `${__dirname}/../data/store.json`,
+      JSON.stringify(store),
+      err => {
+        res.status(201).json({
+          status: 'success',
+          data: {
+          tour: newStore
+          }
+        });
+      }
+    );
+
   } catch (err) {
     res.status(400).json({
       status: 'fail',
@@ -101,6 +138,4 @@ exports.updateStore = async (req, res) => {
     });
   }
 };
-
-
 

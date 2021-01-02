@@ -134,7 +134,9 @@ exports.updateStore = async (req, res) => {
     });
     const request = req.body;
     const keys = Object.keys(request);
-
+    if(keys.includes('id')) {
+      throw new Error('id is immutable');
+    }
     for(let res=0; res<result.length; res++) {
       const val = result[res].id;
       if(val == id) {
@@ -166,9 +168,9 @@ exports.updateStore = async (req, res) => {
       }
     );
   } catch (err) {
-    res.status(404).json({
+    res.status(400).json({
       status: 'fail',
-      message: err
+      message: err.message
     });
   }
 };
@@ -184,7 +186,11 @@ exports.updateCompleteStore = async (req, res) => {
         result = store[key];
       }
     });
-    
+    const request = req.body;
+    const keys = Object.keys(request);
+    if(keys.includes('id')) {
+      throw new Error('id is immutable');
+    }
     for(let res=0; res<result.length; res++) {
       const val = result[res].id;
       if(val == id) {
@@ -205,9 +211,9 @@ exports.updateCompleteStore = async (req, res) => {
       }
     );
   } catch (err) {
-    res.status(404).json({
+    res.status(400).json({
       status: 'fail',
-      message: err
+      message: err.message
     });
   }
 };

@@ -23,7 +23,7 @@ app.route('/:store').post(storeController.createStore);
 // app.route('/')
 app.route('/:store/:id').get(storeController.getStore);
 app.route('/:store/:id').patch(storeController.updateStore);
-app.route('/:store/:id').put(storeController.getStore);
+app.route('/:store/:id').put(storeController.updateCompleteStore);
 app.route('/:store/:id').delete(storeController.deleteStore);
 
 module.exports = app;

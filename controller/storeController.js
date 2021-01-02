@@ -89,9 +89,9 @@ exports.deleteStore = async (req, res) => {
 
 exports.createStore = async (req, res) => {
   try {
-  const entity = req.params.store;
-  let result = [];
-   const id = req.params.id;
+    const entity = req.params.store;
+    let result = [];
+    const id = req.params.id;
     Object.keys(store).forEach(key => {
       if(key === req.params.store) {
         result = store[key];
@@ -108,9 +108,7 @@ exports.createStore = async (req, res) => {
       err => {
         res.status(201).json({
           status: 'success',
-          data: {
-          tour: newStore
-          }
+          data: newStore
         });
       }
     );
@@ -125,12 +123,48 @@ exports.createStore = async (req, res) => {
 
 exports.updateStore = async (req, res) => {
   try {
-
-    res.status(200).json({
-      status: 'success',
-      data: {
+    const entity = req.params.store;
+    let result = [];
+    let index;
+    const id = req.params.id;
+    Object.keys(store).forEach(key => {
+      if(key === req.params.store) {
+        result = store[key];
       }
     });
+    const request = req.body;
+    const keys = Object.keys(request);
+
+    for(let res=0; res<result.length; res++) {
+      const val = result[res].id;
+      if(val == id) {
+        index=res;
+        const mainResult = result[res];
+        keys.map(k => {
+          const mainKeys = Object.keys(mainResult);
+          mainKeys.map(key => {
+            if(key === k && key !='id') {
+              (result[res])[key] = request[k];
+            }
+          });
+          if(!mainKeys.includes(k)) {
+            (result[res])[k] = request[k];
+          }
+          });
+        break;
+      }
+    }
+    store[entity] = result;
+    fs.writeFile(
+      `${__dirname}/../data/store.json`,
+      JSON.stringify(store),
+      err => {
+        res.status(200).json({
+          status: 'success',
+          data: result[index]
+        });
+      }
+    );
   } catch (err) {
     res.status(404).json({
       status: 'fail',
@@ -139,3 +173,41 @@ exports.updateStore = async (req, res) => {
   }
 };
 
+exports.updateCompleteStore = async (req, res) => {
+  try {
+    const entity = req.params.store;
+    let result = [];
+    const id = req.params.id;
+    let newStore = [];
+    Object.keys(store).forEach(key => {
+      if(key === req.params.store) {
+        result = store[key];
+      }
+    });
+    
+    for(let res=0; res<result.length; res++) {
+      const val = result[res].id;
+      if(val == id) {
+        newStore = Object.assign({ id: val }, req.body);
+        result[res] = newStore;
+        break;
+      }
+    }
+    store[entity] = result;
+    fs.writeFile(
+      `${__dirname}/../data/store.json`,
+      JSON.stringify(store),
+      err => {
+        res.status(201).json({
+          status: 'success',
+          data: newStore
+        });
+      }
+    );
+  } catch (err) {
+    res.status(404).json({
+      status: 'fail',
+      message: err
+    });
+  }
+};

@@ -7,11 +7,40 @@ const store = JSON.parse(
 exports.getAllStores = async (req, res) => {
   try {
     let result = [];
+    const queryObj = {...req.query};
+
     Object.keys(store).forEach(key => {
       if(key === req.params.store) {
         result = store[key];
       }
     });
+
+    //Filtering and Searching
+    isSubset = (superObj, subObj) => {
+    return Object.keys(subObj).every(ele => {
+        if (typeof subObj[ele] == 'object') {
+            return isSubset(superObj[ele], subObj[ele]);
+        }
+        return subObj[ele] == superObj[ele]
+      });
+    };
+
+    if(req.query) {
+      const reqQueryObj = {...req.query};
+      const queryKeys = Object.keys(reqQueryObj);
+      
+      if(queryKeys.length === 1 && queryKeys[0] != '_sort') {
+        const mainResult = result.map(re => {
+          if(re[queryKeys] === reqQueryObj[queryKeys]) {
+            result = re;
+          }
+          
+        });
+      } 
+      if(queryKeys.length>1 && !queryKeys.includes('_sort')) {
+        result = result.filter(re => isSubset(re, reqQueryObj));
+      }
+    }
     res.status(200).json({
       status: 'success',
       data: result
@@ -135,7 +164,7 @@ exports.updateStore = async (req, res) => {
     const request = req.body;
     const keys = Object.keys(request);
     if(keys.includes('id')) {
-      throw new Error('id is immutable');
+      throw new Error('Id is immutable');
     }
     for(let res=0; res<result.length; res++) {
       const val = result[res].id;

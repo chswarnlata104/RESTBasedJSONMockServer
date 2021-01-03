@@ -12,35 +12,35 @@ Implemented the task using Node.js. The list of functionalities I have implement
 
 For dev testing, followed the following steps -
 Initially kept the store.json empty. Using the post request, added data into store.json.
-POST /posts
-POST /books
-POST /authors
+1. POST /posts
+2. POST /books
+3. POST /authors
 
 After adding data into store.json. Checked if the post request added the data correctly or not by using the handler of get request.
-GET /posts
-GET /books
-GET /authors
+1. GET /posts
+2. GET /books
+3. GET /authors
 
 Also checked if we can get the details of the entities by using ‘Id’.
-GET /posts/0
-GET /books/0
-GET /authors/0
+1. GET /posts/0
+2. GET /books/0
+3. GET /authors/0
 
 Checked the delete request by using the id field of the entity.
 
-DELETE /posts/0
-DELETE /books/0 
+1. DELETE /posts/0
+2. DELETE /books/0 
 
 Also tried to delete an entity data by using an id that doesn’t exist.
 
 Handled patch and put request. 
-PUT /posts/0
-PUT /authors/0 
-PATCH /posts/0
-PATCH /authors/0
+1. PUT /posts/0
+2. PUT /authors/0 
+3. PATCH /posts/0
+4. PATCH /authors/0
 
 Generated error if id is tried to be mutated in both put and patch requests.
 
 Added code for handling filtering and searching requests.
-GET /posts?title=book&author=CommerceIQ
-GET /posts?title=book
+1. GET /posts?title=book&author=CommerceIQ
+2. GET /posts?title=book
